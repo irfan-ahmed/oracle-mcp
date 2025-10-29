@@ -2,6 +2,8 @@
 
 Repository containing reference implementations of MCP (Model Context Protocol) servers for managing and interacting with Oracle products. Each MCP server under `src/` may be written in a different programming language, demonstrating MCP’s language-agnostic approach.
 
+This is something new
+
 ## What is MCP?
 
 The Model Context Protocol (MCP) enables standardized, language-agnostic machine-to-machine workflows across data, models, and cloud resources. MCP servers implement specific tool suites, exposing them to MCP-compatible clients.
