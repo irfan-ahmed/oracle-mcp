@@ -3,6 +3,7 @@ import re
 from pathlib import Path
 import git
 import semver
+import subprocess
 
 
 def get_servers(root_dir):
@@ -75,6 +76,47 @@ def bump_version(current_version, bump_type):
     return current_version
 
 
+def git_push(branch_name):
+    try:
+        print(f"Now pushing {branch_name} to origin\n")
+        # Construct the git push command
+        command = ["git", "push", "-u", "origin", branch_name]
+
+        # Execute the command
+        process = subprocess.Popen(
+            command,
+            cwd=".",  # Set the working directory for the command
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,  # Decode output as text (UTF-8 by default)
+        )
+
+        # Communicate with the process and get output
+        stdout, stderr = process.communicate()
+
+        # Print the output
+        if stdout:
+            print(stdout)
+        if stderr:
+            print(stderr)
+
+        # Check the return code for success or failure
+        if process.returncode != 0:
+            print(f"Git push failed with exit code: {process.returncode}")
+            return False
+        else:
+            return True
+
+    except FileNotFoundError:
+        print(
+            "Error: 'git' command not found. Please ensure Git is installed and in your PATH."
+        )
+        return False
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+        return False
+
+
 def create_release(root_dir="."):
     aggregated = aggregate_changes(root_dir)
     bump_type = determine_bump_type(aggregated)
@@ -89,3 +131,9 @@ def create_release(root_dir="."):
     branch_name = f"release-{new_version}"
     repo.create_head(branch_name)
     print(f"Created release branch: {branch_name}")
+
+    repo.git.checkout(branch_name)
+    print(f"Checked out to {branch_name}")
+
+    git_push(branch_name)
+    print(f"Pushed {branch_name} to origin")
