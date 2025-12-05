@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "monorepo-utils"
+version = "0.1.0"
+description = "Utilities for managing Python monorepos with MCP servers"
+authors = [{name = "Cline", email = "cline@example.com"}]
+license = {text = "MIT"}
+requires-python = ">=3.8"
+dependencies = [
+    "click",
+    "gitpython",
+    "tomlkit",
+    "semver",
+]
+
+[project.scripts]
+mono-utils = "monorepo_utils.cli:main"
